@@ -142,7 +142,6 @@ tables:
         expr: "INCIDENT_TYPE"
         data_type: STRING
         unique: false
-        is_enum: true
         sample_values:
           - 'Single Vehicle Collision'
           - 'Vehicle Theft'
@@ -153,10 +152,8 @@ tables:
         expr: "INCIDENT_SEVERITY"
         data_type: STRING
         unique: false
-        is_enum: true
         sample_values:
           - 'Major Damage'
-          - 'Minor Damage'
           - 'Minor Damage'
       - name: authorities_contacted
         synonyms: ["authorities", "official contact"]
@@ -164,11 +161,10 @@ tables:
         expr: "AUTHORITIES_CONTACTED"
         data_type: STRING
         unique: false
-        is_enum: true
         sample_values:
           - 'Police'
-          - 'Police'
-          - 'Police'
+          - 'Fire'
+          - 'Other'
       - name: vehicles_involved
         synonyms: ["number of vehicles", "vehicle count"]
         description: "Number of vehicles involved in the incident"
@@ -177,7 +173,7 @@ tables:
         unique: false
         sample_values:
           - 1
-          - 1
+          - 2
           - 3
       - name: bodily_injuries
         synonyms: ["injuries", "injury count"]
@@ -186,8 +182,8 @@ tables:
         data_type: NUMBER
         unique: false
         sample_values:
-          - 1
           - 0
+          - 1
           - 2
       - name: witnesses
         synonyms: ["witness count", "number of witnesses"]
@@ -196,16 +192,15 @@ tables:
         data_type: NUMBER
         unique: false
         sample_values:
-          - 2
           - 0
-          - 3
+          - 1
+          - 2
       - name: police_report
         synonyms: ["police documentation", "official report"]
         description: "Whether a police report is available"
         expr: "POLICE_REPORT_AVAILABLE"
         data_type: STRING
         unique: false
-        is_enum: true
         sample_values:
           - 'YES'
           - '?'
@@ -218,9 +213,8 @@ tables:
         unique: false
         is_enum: true
         sample_values:
-          - true
-          - true
-          - false
+          - TRUE
+          - FALSE
       - name: incident_hour
         synonyms: ["hour of incident", "time of incident"]
         description: "Hour of the day when the incident occurred"
