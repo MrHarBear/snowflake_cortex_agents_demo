@@ -32,6 +32,31 @@ Cortex Agents follow a structured approach to problem-solving:
 This is the App you will build:
 [![Cortex Chat App](resources/github_video_image.png)](https://www.youtube.com/watch?v=XwmynoLVUqw)
 
+
+## Example Questions
+### Selected Services:
+Make sure to select the following services:  
+- **ANNUAL_REPORTS_SEARCH**
+- **semantic_models/sales_orders.yaml**
+
+### **Questions for Structured Data**  
+These queries operate on structured, tabular data sources.
+
+| Question | Data Complexity | Level |
+|----------|----------------|--------|
+| What was the total order quantity per month with status shipped? | Single table, no Search Integration | 🟢 **Easy** |
+| What was the total order quantity per month for United Kingdom with status shipped? | Single table, 1 Search Integration | 🟡 **Medium** |
+| What was the order revenue per month for steel for my customer Delta? | 3 tables, 2 Search Integrations | 🔴 **Hard** |
+
+### **Questions for Unstructured Data**  
+These queries analyze text-based documents.
+
+| Question | Data Complexity | Level |
+|----------|----------------|--------|
+| What were the latest AI innovations from Googol in 2024? | Single text chunk | 🟢 **Easy** |
+| What was the net profit for Delta in 2024 and which people were part of the board? | Two chunks from one document | 🟡 **Medium** |
+| What was the combined net profit for Googol and Delta in 2024 according to their annual reports? | Two chunks from two documents | 🔴 **Hard** |
+
 ## Prerequisites
 - A Snowflake Account
 - 5 Minutes time  
@@ -74,7 +99,7 @@ CREATE OR REPLACE STAGE SEMANTIC_MODELS
   
 CREATE OR REPLACE STAGE STREAMLIT_APP
   DIRECTORY = (ENABLE = TRUE)
-  ENCRYPTION = ( TYPE = 'SNOWFLAKE_SSE' );
+  ENCRYPTION = ( TYPE = 'SNOWFLAKE_FULL' );
   
 -- Fetch most recent files from Github repository
 ALTER GIT REPOSITORY GITHUB_REPO_CORTEX_AGENTS_DEMO FETCH;

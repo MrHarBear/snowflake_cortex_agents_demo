@@ -76,7 +76,7 @@ class AnalystService:
 class SearchService:
     """Data class for Cortex Search services."""
     def __init__(self, name: str, database: str, schema: str, full_name: str, 
-                active: bool = False, max_results: int = 1):
+                active: bool = False, max_results: int = 2):
         self.name = name
         self.database = database
         self.schema = schema
@@ -229,7 +229,7 @@ class DataService:
                 .with_column('"Full Name"', concat_ws(lit('.'), col('"Database"'), col('"Schema"'), col('"Name"')))
             ).to_pandas()
             available_services['Active'] = False
-            available_services['Max Results'] = 1
+            available_services['Max Results'] = 2
             available_services = available_services[['Active','Name','Database','Schema','Max Results','Full Name']]
             return available_services
         except Exception as e:
@@ -1343,7 +1343,7 @@ class UIComponents:
                 chart_container = st.container()
                 with chart_container:
                     if f"custom_chart_{message_index}" not in st.session_state:
-                        st.plotly_chart(message['visualization'], use_container_width=True)
+                        st.plotly_chart(message['visualization'], use_container_width=True, key=f"vis_chart_{message_index}")
                     else:
                         st.plotly_chart(st.session_state[f"custom_chart_{message_index}"], use_container_width=True)
                 
@@ -1735,7 +1735,7 @@ def manage_search_services():
             ).to_pandas()
             
             services['Active'] = False
-            services['Max Results'] = 1
+            services['Max Results'] = 2
             services = services[['Active','Name','Database','Schema','Max Results','Full Name']]
             st.session_state.search_services = services
         except Exception as e:
