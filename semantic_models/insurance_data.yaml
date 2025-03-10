@@ -1,0 +1,345 @@
+# Name and description of the semantic model.
+name: insurance_data_model
+description: "Insurance Policy and Claims Analysis Semantic Model"
+comments: "This model connects customer policy data with claim information to enable analysis of insurance performance and fraud detection"
+
+# Logical table-level concepts
+tables:
+  # Customer/Policy table
+  - name: policies
+    description: "Insurance policies and customer information"
+    base_table:
+      database: INSURANCE_DB
+      schema: PUBLIC
+      table: CUSTOMER_DATA
+    dimensions:
+      - name: policy_id
+        synonyms: ["policy number", "policy id", "insurance policy"]
+        description: "Unique identifier for insurance policy"
+        expr: "POLICY_NUMBER"
+        data_type: NUMBER
+        unique: true
+        sample_values:
+          - 521585
+          - 342868
+          - 687698
+      - name: customer_gender
+        synonyms: ["gender", "sex"]
+        description: "Gender of the insured customer"
+        expr: "INSURED_SEX"
+        data_type: STRING
+        unique: false
+        sample_values:
+          - 'M'
+          - 'F'
+        is_enum: true
+      - name: education_level
+        synonyms: ["education", "academic qualification"]
+        description: "Education level of the insured customer"
+        expr: "INSURED_EDUCATION_LEVEL"
+        data_type: STRING
+        unique: false
+        sample_values:
+          - 'MD'
+          - 'PhD'
+          - 'Associate'
+      - name: occupation
+        synonyms: ["job", "profession", "employment"]
+        description: "Occupation of the insured customer"
+        expr: "INSURED_OCCUPATION"
+        data_type: STRING
+        unique: false
+        sample_values:
+          - 'craft-repair'
+          - 'sales'
+          - 'machine-op-inspct'
+    time_dimensions:
+      - name: policy_start_date
+        synonyms: ["start date", "inception date", "effective date"]
+        description: "The date when the policy coverage started"
+        expr: "TO_DATE(POLICY_START_DATE)"
+        data_type: DATE
+        unique: false
+        sample_values:
+          - '2014-10-17'
+          - '2006-06-27'
+          - '2000-09-06'
+    facts:
+      - name: annual_premium
+        synonyms: ["premium", "yearly premium", "insurance cost"]
+        description: "Annual premium amount for the policy"
+        expr: "POLICY_ANNUAL_PREMIUM"
+        data_type: FLOAT
+        sample_values:
+          - 1406.91
+          - 1197.22
+          - 1413.14
+      - name: policy_deductible
+        synonyms: ["deductible", "insurance deductible"]
+        description: "Policy deductible amount"
+        expr: "POLICY_DEDUCTABLE"
+        data_type: NUMBER
+        sample_values:
+          - 1000
+          - 2000
+          - 2000
+      - name: customer_age
+        synonyms: ["age", "customer age", "insured age"]
+        description: "Age of the insured customer"
+        expr: "AGE"
+        data_type: NUMBER
+        sample_values:
+          - 48
+          - 42
+          - 29
+      - name: policy_length_months
+        synonyms: ["policy duration", "coverage period", "policy length"]
+        description: "Duration of policy coverage in months"
+        expr: "POLICY_LENGTH_MONTH" 
+        data_type: NUMBER
+        sample_values:
+          - 328
+          - 228
+          - 134
+    metrics:
+      - name: avg_premium
+        synonyms: ["average premium", "mean premium"]
+        description: "Average annual premium across policies"
+        expr: "AVG(POLICY_ANNUAL_PREMIUM)"
+        data_type: FLOAT
+      - name: policy_count
+        synonyms: ["number of policies", "total policies"]
+        description: "Total number of policies"
+        expr: "COUNT(POLICY_NUMBER)"
+        data_type: NUMBER
+    filters:
+      - name: high_premium_policies
+        synonyms: ["expensive policies", "premium policies"]
+        description: "Policies with annual premium above $1,400"
+        expr: "POLICY_ANNUAL_PREMIUM > 1400"
+
+  # Claims table
+  - name: claims
+    description: "Insurance claim information including fraud indicators"
+    base_table:
+      database: INSURANCE_DB
+      schema: PUBLIC
+      table: CLAIM_DATA
+    dimensions:
+      - name: policy_id
+        synonyms: ["policy number", "policy id", "insurance policy"]
+        description: "Policy number associated with the claim"
+        expr: "POLICY_NUMBER"
+        data_type: NUMBER
+        unique: false
+        sample_values:
+          - 521585
+          - 342868
+          - 687698
+      - name: incident_type
+        synonyms: ["accident type", "claim type"]
+        description: "Type of incident that led to the claim"
+        expr: "INCIDENT_TYPE"
+        data_type: STRING
+        unique: false
+        is_enum: true
+        sample_values:
+          - 'Single Vehicle Collision'
+          - 'Vehicle Theft'
+          - 'Multi-vehicle Collision'
+      - name: incident_severity
+        synonyms: ["severity", "damage level"]
+        description: "Severity of the incident"
+        expr: "INCIDENT_SEVERITY"
+        data_type: STRING
+        unique: false
+        is_enum: true
+        sample_values:
+          - 'Major Damage'
+          - 'Minor Damage'
+          - 'Minor Damage'
+      - name: authorities_contacted
+        synonyms: ["authorities", "official contact"]
+        description: "Authorities contacted regarding the incident"
+        expr: "AUTHORITIES_CONTACTED"
+        data_type: STRING
+        unique: false
+        is_enum: true
+        sample_values:
+          - 'Police'
+          - 'Police'
+          - 'Police'
+      - name: vehicles_involved
+        synonyms: ["number of vehicles", "vehicle count"]
+        description: "Number of vehicles involved in the incident"
+        expr: "NUMBER_OF_VEHICLES_INVOLVED"
+        data_type: NUMBER
+        unique: false
+        sample_values:
+          - 1
+          - 1
+          - 3
+      - name: bodily_injuries
+        synonyms: ["injuries", "injury count"]
+        description: "Number of bodily injuries resulting from the incident"
+        expr: "BODILY_INJURIES"
+        data_type: NUMBER
+        unique: false
+        sample_values:
+          - 1
+          - 0
+          - 2
+      - name: witnesses
+        synonyms: ["witness count", "number of witnesses"]
+        description: "Number of witnesses to the incident"
+        expr: "WITNESSES"
+        data_type: NUMBER
+        unique: false
+        sample_values:
+          - 2
+          - 0
+          - 3
+      - name: police_report
+        synonyms: ["police documentation", "official report"]
+        description: "Whether a police report is available"
+        expr: "POLICE_REPORT_AVAILABLE"
+        data_type: STRING
+        unique: false
+        is_enum: true
+        sample_values:
+          - 'YES'
+          - '?'
+          - 'NO'
+      - name: fraud_reported
+        synonyms: ["fraud", "fraudulent claim"]
+        description: "Whether fraud was reported for this claim"
+        expr: "FRAUD_REPORTED"
+        data_type: BOOLEAN
+        unique: false
+        is_enum: true
+        sample_values:
+          - true
+          - true
+          - false
+      - name: incident_hour
+        synonyms: ["hour of incident", "time of incident"]
+        description: "Hour of the day when the incident occurred"
+        expr: "INCIDENT_HOUR_OF_THE_DAY"
+        data_type: NUMBER
+        unique: false
+        sample_values:
+          - 5
+          - 8
+          - 7
+    time_dimensions:
+      - name: incident_date
+        synonyms: ["claim date", "date of incident", "accident date"]
+        description: "Date when the incident occurred"
+        expr: "TO_DATE(INCIDENT_DATE)"
+        data_type: DATE
+        unique: false
+        sample_values:
+          - '2015-01-25'
+          - '2015-01-21'
+          - '2015-02-22'
+    facts:
+      - name: claim_amount
+        synonyms: ["payout", "claim payout", "settlement amount"]
+        description: "Amount paid for the claim"
+        expr: "CLAIM_AMOUNT"
+        data_type: NUMBER
+        sample_values:
+          - 71610
+          - 5070
+          - 34650
+    metrics:
+      - name: total_claim_amount
+        synonyms: ["total payout", "total claims", "sum of claims"]
+        description: "Total amount paid for claims"
+        expr: "SUM(CLAIM_AMOUNT)"
+        data_type: NUMBER
+      - name: avg_claim_amount
+        synonyms: ["average claim", "mean payout"]
+        description: "Average amount paid per claim"
+        expr: "AVG(CLAIM_AMOUNT)"
+        data_type: FLOAT
+      - name: fraud_rate
+        synonyms: ["fraud percentage", "fraud ratio"]
+        description: "Percentage of claims marked as fraudulent"
+        expr: "SUM(CASE WHEN FRAUD_REPORTED = true THEN 1 ELSE 0 END) / COUNT(*) * 100"
+        data_type: FLOAT
+    filters:
+      - name: high_value_claims
+        synonyms: ["expensive claims", "large payouts"]
+        description: "Claims with payout amount over $50,000"
+        expr: "CLAIM_AMOUNT > 50000"
+      - name: fraudulent_claims
+        synonyms: ["fraud cases", "confirmed fraud"]
+        description: "Claims that have been marked as fraudulent"
+        expr: "FRAUD_REPORTED = true"
+
+# Model-level concepts
+relationships:
+  - name: policy_to_claims
+    description: "Relationship connecting policies to their associated claims"
+    left_table: policies
+    right_table: claims
+    join_key:
+      - left_column: policy_id
+        right_column: policy_id
+    join_type: left_outer
+    relationship_type: one_to_many
+
+# Verified queries with example questions and queries that answer them
+verified_queries:
+  - name: fraud_by_policy_type
+    question: "What is the fraud rate for policies with different deductible amounts?"
+    verified_at: 1709827200
+    verified_by: "Insurance Data Team"
+    use_as_onboarding_question: true
+    expr: |
+      SELECT 
+        p.policy_deductible,
+        COUNT(DISTINCT p.policy_id) AS total_policies,
+        COUNT(DISTINCT c.policy_id) AS policies_with_claims,
+        SUM(CASE WHEN c.fraud_reported = true THEN 1 ELSE 0 END) AS fraudulent_claims,
+        SUM(CASE WHEN c.fraud_reported = true THEN 1 ELSE 0 END) / COUNT(DISTINCT c.policy_id) * 100 AS fraud_rate_pct
+      FROM policies p
+      LEFT JOIN claims c ON p.policy_id = c.policy_id
+      GROUP BY p.policy_deductible
+      ORDER BY p.policy_deductible
+
+  - name: claim_amount_by_incident_type
+    question: "What is the average claim amount by incident type?"
+    verified_at: 1709913600
+    verified_by: "Insurance Analytics Team"
+    use_as_onboarding_question: true
+    expr: |
+      SELECT
+        c.incident_type,
+        COUNT(*) AS number_of_claims,
+        AVG(c.claim_amount) AS average_claim_amount,
+        MIN(c.claim_amount) AS minimum_claim,
+        MAX(c.claim_amount) AS maximum_claim
+      FROM claims c
+      GROUP BY c.incident_type
+      ORDER BY average_claim_amount DESC
+
+  - name: fraud_by_demographic
+    question: "How does the fraud rate vary by customer age, gender, and education level?"
+    verified_at: 1710000000
+    verified_by: "Fraud Prevention Team"
+    use_as_onboarding_question: false
+    expr: |
+      SELECT
+        p.customer_age,
+        p.customer_gender,
+        p.education_level,
+        COUNT(DISTINCT c.policy_id) AS total_claims,
+        SUM(CASE WHEN c.fraud_reported = true THEN 1 ELSE 0 END) AS fraudulent_claims,
+        SUM(CASE WHEN c.fraud_reported = true THEN 1 ELSE 0 END) / COUNT(DISTINCT c.policy_id) * 100 AS fraud_percentage
+      FROM policies p
+      JOIN claims c ON p.policy_id = c.policy_id
+      GROUP BY p.customer_age, p.customer_gender, p.education_level
+      HAVING COUNT(DISTINCT c.policy_id) >= 5
+      ORDER BY fraud_percentage DESC
