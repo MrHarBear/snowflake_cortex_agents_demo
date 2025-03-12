@@ -9,9 +9,9 @@ tables:
   - name: policies
     description: "Insurance policies and customer information"
     base_table:
-      database: INSURANCE_DB
-      schema: PUBLIC
-      table: CUSTOMER_DATA
+      database: SWT2024_DEMO_AUTO_INSURANCE
+      schema: DATA
+      table: CUSTOMER_DATA_AGENT_DEMO
     dimensions:
       - name: policy_id
         synonyms: ["policy number", "policy id", "insurance policy"]
@@ -43,6 +43,10 @@ tables:
           - 'MD'
           - 'PhD'
           - 'Associate'
+        cortex_search_service:
+          service: EDUCATION_LEVEL_SEARCH
+          database: SWT2024_DEMO_AUTO_INSURANCE
+          schema: DATA
       - name: occupation
         synonyms: ["job", "profession", "employment"]
         description: "Occupation of the insured customer"
@@ -53,6 +57,10 @@ tables:
           - 'craft-repair'
           - 'sales'
           - 'machine-op-inspct'
+        cortex_search_service:
+          service: OCCUPATION_SEARCH
+          database: SWT2024_DEMO_AUTO_INSURANCE
+          schema: DATA
     time_dimensions:
       - name: policy_start_date
         synonyms: ["start date", "inception date", "effective date"]
@@ -146,6 +154,10 @@ tables:
           - 'Single Vehicle Collision'
           - 'Vehicle Theft'
           - 'Multi-vehicle Collision'
+        cortex_search_service:
+          service: INCIDENT_TYPE_SEARCH
+          database: SWT2024_DEMO_AUTO_INSURANCE
+          schema: DATA
       - name: incident_severity
         synonyms: ["severity", "damage level"]
         description: "Severity of the incident"
@@ -155,6 +167,9 @@ tables:
         sample_values:
           - 'Major Damage'
           - 'Minor Damage'
+          - 'Total Loss'
+          - 'Trivial Damage'
+        is_enum: true
       - name: authorities_contacted
         synonyms: ["authorities", "official contact"]
         description: "Authorities contacted regarding the incident"
@@ -165,6 +180,10 @@ tables:
           - 'Police'
           - 'Fire'
           - 'Other'
+        cortex_search_service:
+          service: AUTHORITIES_CONTACTED_SEARCH
+          database: SWT2024_DEMO_AUTO_INSURANCE
+          schema: DATA
       - name: vehicles_involved
         synonyms: ["number of vehicles", "vehicle count"]
         description: "Number of vehicles involved in the incident"
