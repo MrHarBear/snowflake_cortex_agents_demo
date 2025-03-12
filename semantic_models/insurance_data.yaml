@@ -130,9 +130,9 @@ tables:
   - name: claims
     description: "Insurance claim information including fraud indicators"
     base_table:
-      database: INSURANCE_DB
-      schema: PUBLIC
-      table: CLAIM_DATA
+      database: SWT2024_DEMO_AUTO_INSURANCE
+      schema: DATA
+      table: CLAIM_DATA_AGENT_DEMO
     dimensions:
       - name: policy_id
         synonyms: ["policy number", "policy id", "insurance policy"]
