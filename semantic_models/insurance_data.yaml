@@ -1,7 +1,5 @@
 # Name and description of the semantic model.
 name: insurance_data_model
-description: "Insurance Policy and Claims Analysis Semantic Model"
-comments: "This model connects customer policy data with claim information to enable analysis of insurance performance and fraud detection"
 
 # Logical table-level concepts
 tables:
