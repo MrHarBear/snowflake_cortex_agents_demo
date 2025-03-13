@@ -305,7 +305,6 @@ tables:
           - total claims
           - sum of claims
         expr: SUM(CLAIM_AMOUNT)
-        data_type: NUMBER
       - name: avg_claim_amount
         synonyms: 
           - average claim
