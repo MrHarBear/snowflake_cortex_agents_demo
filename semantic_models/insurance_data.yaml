@@ -330,7 +330,7 @@ relationships:
       - left_column: policy_id
         right_column: policy_id
     join_type: left_outer
-    relationship_type: one_to_many
+    relationship_type: many_to_one
 
 # Verified queries with example questions and queries that answer them
 verified_queries:
