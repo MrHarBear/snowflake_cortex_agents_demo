@@ -356,7 +356,7 @@ verified_queries:
     verified_at: 1709913600
     verified_by: Insurance Analytics Team
     use_as_onboarding_question: true
-    expr: |
+    sql: "
       SELECT
         c.incident_type,
         COUNT(*) AS number_of_claims,
@@ -365,14 +365,14 @@ verified_queries:
         MAX(c.claim_amount) AS maximum_claim
       FROM claims c
       GROUP BY c.incident_type
-      ORDER BY average_claim_amount DESC
+      ORDER BY average_claim_amount DESC"
 
   - name: fraud_by_demographic
     question: How does the fraud rate vary by customer age, gender, and education level?
     verified_at: 1710000000
     verified_by: Fraud Prevention Team
-    use_as_onboarding_question: false
-    expr: |
+    use_as_onboarding_question: true
+    sql: "
       SELECT
         p.customer_age,
         p.customer_gender,
@@ -384,4 +384,4 @@ verified_queries:
       JOIN claims c ON p.policy_id = c.policy_id
       GROUP BY p.customer_age, p.customer_gender, p.education_level
       HAVING COUNT(DISTINCT c.policy_id) >= 5
-      ORDER BY fraud_percentage DESC
+      ORDER BY fraud_percentage DESC"
