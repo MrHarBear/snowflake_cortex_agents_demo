@@ -339,7 +339,7 @@ verified_queries:
     verified_at: 1709827200
     verified_by: Insurance Data Team
     use_as_onboarding_question: true
-    expr: |
+    sql: "
       SELECT 
         p.policy_deductible,
         COUNT(DISTINCT p.policy_id) AS total_policies,
@@ -349,7 +349,7 @@ verified_queries:
       FROM policies p
       LEFT JOIN claims c ON p.policy_id = c.policy_id
       GROUP BY p.policy_deductible
-      ORDER BY p.policy_deductible
+      ORDER BY p.policy_deductible"
 
   - name: claim_amount_by_incident_type
     question: What is the average claim amount by incident type?
