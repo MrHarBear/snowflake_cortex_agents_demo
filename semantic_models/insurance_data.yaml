@@ -65,6 +65,9 @@ tables:
           service: OCCUPATION_SEARCH
           database: SWT2024_DEMO_AUTO_INSURANCE
           schema: DATA
+    primary_key:
+      columns:
+        - POLICY_NUMBER
     time_dimensions:
       - name: policy_start_date
         synonyms: 
@@ -267,6 +270,9 @@ tables:
           - '5'
           - '8'
           - '7'
+    primary_key:
+      columns:
+        - POLICY_NUMBER
     time_dimensions:
       - name: incident_date
         synonyms: 
