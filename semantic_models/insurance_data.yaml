@@ -71,7 +71,7 @@ tables:
           - start date
           - inception date
           - effective date
-        expr: TO_DATE(POLICY_START_DATE)
+        expr: POLICY_START_DATE
         data_type: DATE
         unique: false
         sample_values:
@@ -129,13 +129,11 @@ tables:
           - average premium
           - mean premium
         expr: AVG(POLICY_ANNUAL_PREMIUM)
-        data_type: NUMBER
       - name: policy_count
         synonyms: 
           - number of policies
           - total policies
         expr: COUNT(POLICY_NUMBER)
-        data_type: NUMBER
     filters:
       - name: high_premium_policies
         synonyms: 
@@ -184,6 +182,7 @@ tables:
         expr: INCIDENT_SEVERITY
         data_type: STRING
         unique: false
+        is_enum: true
         sample_values:
           - Major Damage
           - Minor Damage
@@ -300,19 +299,16 @@ tables:
           - total claims
           - sum of claims
         expr: SUM(CLAIM_AMOUNT)
-        data_type: NUMBER
       - name: avg_claim_amount
         synonyms: 
           - average claim
           - mean payout
         expr: AVG(CLAIM_AMOUNT)
-        data_type: FLOAT
       - name: fraud_rate
         synonyms: 
           - fraud percentage
           - fraud ratio
         expr: SUM(CASE WHEN FRAUD_REPORTED = true THEN 1 ELSE 0 END) / COUNT(*) * 100
-        data_type: FLOAT
     filters:
       - name: high_value_claims
         synonyms: 
