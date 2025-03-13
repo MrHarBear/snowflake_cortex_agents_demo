@@ -5,7 +5,6 @@ name: insurance_data_model
 tables:
   # Customer/Policy table
   - name: policies
-    description: Insurance policies and customer information
     base_table:
       database: SWT2024_DEMO_AUTO_INSURANCE
       schema: DATA
@@ -159,7 +158,6 @@ tables:
 
   # Claims table
   - name: claims
-    description: Insurance claim information including fraud indicators
     base_table:
       database: SWT2024_DEMO_AUTO_INSURANCE
       schema: DATA
