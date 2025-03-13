@@ -333,8 +333,8 @@ relationships:
     left_table: policies
     right_table: claims
     relationship_columns:
-      - left_column: policy_id
-        right_column: policy_id
+      - left_column: POLICY_NUMBER
+        right_column: POLICY_NUMBER
     join_type: left_outer
     relationship_type: many_to_one
 
