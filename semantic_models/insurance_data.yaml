@@ -5,7 +5,6 @@ name: insurance_data_model
 tables:
   # Customer/Policy table
   - name: policies
-    description: Insurance policies and customer information
     base_table:
       database: SWT2024_DEMO_AUTO_INSURANCE
       schema: DATA
@@ -16,7 +15,6 @@ tables:
           - policy number
           - policy id
           - insurance policy
-        description: Unique identifier for insurance policy
         expr: POLICY_NUMBER
         data_type: NUMBER
         unique: true
@@ -28,7 +26,6 @@ tables:
         synonyms: 
           - gender
           - sex
-        description: Gender of the insured customer
         expr: INSURED_SEX
         data_type: STRING
         unique: false
@@ -41,7 +38,6 @@ tables:
           - education
           - academic qualification
           - qualification
-        description: Education level of the insured customer
         expr: INSURED_EDUCATION_LEVEL
         data_type: STRING
         unique: false
@@ -59,7 +55,6 @@ tables:
           - profession
           - employment
           - career
-        description: Occupation of the insured customer
         expr: INSURED_OCCUPATION
         data_type: STRING
         unique: false
@@ -77,7 +72,6 @@ tables:
           - start date
           - inception date
           - effective date
-        description: The date when the policy coverage started
         expr: TO_DATE(POLICY_START_DATE)
         data_type: DATE
         unique: false
@@ -92,7 +86,6 @@ tables:
           - yearly premium
           - insurance cost
           - gross premium
-        description: Annual premium amount for the policy
         expr: POLICY_ANNUAL_PREMIUM
         data_type: NUMBER
         sample_values:
@@ -103,7 +96,6 @@ tables:
         synonyms: 
           - deductible
           - insurance deductible
-        description: Policy deductible amount
         expr: POLICY_DEDUCTABLE
         data_type: NUMBER
         sample_values:
@@ -115,7 +107,6 @@ tables:
           - age
           - customer age
           - insured age
-        description: Age of the insured customer
         expr: AGE
         data_type: NUMBER
         sample_values:
@@ -127,7 +118,6 @@ tables:
           - policy duration
           - coverage period
           - policy length
-        description: Duration of policy coverage in months
         expr: POLICY_LENGTH_MONTH 
         data_type: NUMBER
         sample_values:
@@ -139,14 +129,12 @@ tables:
         synonyms: 
           - average premium
           - mean premium
-        description: Average annual premium across policies
         expr: AVG(POLICY_ANNUAL_PREMIUM)
         data_type: NUMBER
       - name: policy_count
         synonyms: 
           - number of policies
           - total policies
-        description: Total number of policies
         expr: COUNT(POLICY_NUMBER)
         data_type: NUMBER
     filters:
@@ -154,12 +142,10 @@ tables:
         synonyms: 
           - expensive policies
           - premium policies
-        description: Policies with annual premium above $1,400
         expr: POLICY_ANNUAL_PREMIUM > 1400
 
   # Claims table
   - name: claims
-    description: Insurance claim information including fraud indicators
     base_table:
       database: SWT2024_DEMO_AUTO_INSURANCE
       schema: DATA
@@ -170,7 +156,6 @@ tables:
           - policy number
           - policy id
           - insurance policy
-        description: Policy number associated with the claim
         expr: POLICY_NUMBER
         data_type: NUMBER
         unique: false
@@ -182,7 +167,6 @@ tables:
         synonyms: 
           - accident type
           - claim type
-        description: Type of incident that led to the claim
         expr: INCIDENT_TYPE
         data_type: STRING
         unique: false
@@ -198,7 +182,6 @@ tables:
         synonyms: 
           - severity
           - damage level
-        description: Severity of the incident
         expr: INCIDENT_SEVERITY
         data_type: STRING
         unique: false
@@ -212,7 +195,6 @@ tables:
         synonyms: 
           - authorities
           - official contact
-        description: Authorities contacted regarding the incident
         expr: AUTHORITIES_CONTACTED
         data_type: STRING
         unique: false
@@ -228,7 +210,6 @@ tables:
         synonyms: 
           - number of vehicles
           - vehicle count
-        description: Number of vehicles involved in the incident
         expr: NUMBER_OF_VEHICLES_INVOLVED
         data_type: NUMBER
         unique: false
@@ -240,7 +221,6 @@ tables:
         synonyms: 
           - injuries
           - injury count
-        description: Number of bodily injuries resulting from the incident
         expr: BODILY_INJURIES
         data_type: NUMBER
         unique: false
@@ -252,7 +232,6 @@ tables:
         synonyms: 
           - witness count
           - number of witnesses
-        description: Number of witnesses to the incident
         expr: WITNESSES
         data_type: NUMBER
         unique: false
@@ -264,7 +243,6 @@ tables:
         synonyms: 
           - police documentation
           - official report
-        description: Whether a police report is available
         expr: POLICE_REPORT_AVAILABLE
         data_type: STRING
         unique: false
@@ -275,7 +253,6 @@ tables:
         synonyms: 
           - fraud
           - fraudulent claim
-        description: Whether fraud was reported for this claim
         expr: FRAUD_REPORTED
         data_type: BOOLEAN
         unique: false
@@ -287,7 +264,6 @@ tables:
         synonyms: 
           - hour of incident
           - time of incident
-        description: Hour of the day when the incident occurred
         expr: INCIDENT_HOUR_OF_THE_DAY
         data_type: NUMBER
         unique: false
@@ -301,7 +277,6 @@ tables:
           - claim date
           - date of incident
           - accident date
-        description: Date when the incident occurred
         expr: INCIDENT_DATE
         data_type: DATE
         unique: false
@@ -315,7 +290,6 @@ tables:
           - payout 
           - claim payout
           - settlement amount
-        description: Amount paid for the claim
         expr: CLAIM_AMOUNT
         data_type: NUMBER
         sample_values:
@@ -328,21 +302,18 @@ tables:
           - total payout
           - total claims
           - sum of claims
-        description: Total amount paid for claims
         expr: SUM(CLAIM_AMOUNT)
         data_type: NUMBER
       - name: avg_claim_amount
         synonyms: 
           - average claim
           - mean payout
-        description: Average amount paid per claim
         expr: AVG(CLAIM_AMOUNT)
         data_type: FLOAT
       - name: fraud_rate
         synonyms: 
           - fraud percentage
           - fraud ratio
-        description: Percentage of claims marked as fraudulent
         expr: SUM(CASE WHEN FRAUD_REPORTED = true THEN 1 ELSE 0 END) / COUNT(*) * 100
         data_type: FLOAT
     filters:
@@ -350,19 +321,16 @@ tables:
         synonyms: 
           - expensive claims
           - large payouts
-        description: Claims with payout amount over $50,000
         expr: CLAIM_AMOUNT > 50000
       - name: fraudulent_claims
         synonyms: 
           - fraud cases
           - confirmed fraud
-        description: Claims that have been marked as fraudulent
         expr: FRAUD_REPORTED = true
 
 # Model-level concepts
 relationships:
   - name: policy_to_claims
-    description: Relationship connecting policies to their associated claims
     left_table: policies
     right_table: claims
     relationship_columns:
